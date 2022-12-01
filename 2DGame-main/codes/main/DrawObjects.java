@@ -6,9 +6,11 @@ import monster.MON_BlueBall;
 import monster.MON_GreenSlime;
 import objects.OBJ_Axe;
 import objects.OBJ_Boots;
+import objects.OBJ_Chest;
 import objects.OBJ_Door;
 import objects.OBJ_Heart;
 import objects.OBJ_Key;
+import objects.OBJ_Lantern;
 import objects.OBJ_ManaBEER;
 import objects.OBJ_Potion_Red;
 import objects.OBJ_Shield_blue;
@@ -37,6 +39,11 @@ public class DrawObjects {
 		gs.obj[mapNum][i].worldY = gs.sizeRect * 15;
 		i++;
 		
+		gs.obj[mapNum][i] = new OBJ_Lantern(gs);
+		gs.obj[mapNum][i].worldX = gs.sizeRect * 28;
+		gs.obj[mapNum][i].worldY = gs.sizeRect * 10;
+		i++;
+		
 		gs.obj[mapNum][i] = new OBJ_Heart(gs);
 		gs.obj[mapNum][i].worldX = gs.sizeRect * 29;
 		gs.obj[mapNum][i].worldY = gs.sizeRect * 15;
@@ -63,13 +70,33 @@ public class DrawObjects {
 		i++;
 		
 		gs.obj[mapNum][i] = new OBJ_Door(gs);
-		gs.obj[mapNum][i].worldX = gs.sizeRect * 25;
-		gs.obj[mapNum][i].worldY = gs.sizeRect * 19;
+		gs.obj[mapNum][i].worldX = gs.sizeRect * 16;
+		gs.obj[mapNum][i].worldY = gs.sizeRect * 17;
 		i++;
 		
 		gs.obj[mapNum][i] = new OBJ_Key(gs);
 		gs.obj[mapNum][i].worldX = gs.sizeRect * 31;
 		gs.obj[mapNum][i].worldY = gs.sizeRect * 19;
+		i++;
+		
+		gs.obj[mapNum][i] = new OBJ_Key(gs);
+		gs.obj[mapNum][i].worldX = gs.sizeRect * 15;
+		gs.obj[mapNum][i].worldY = gs.sizeRect * 19;
+		i++;
+		
+		gs.obj[mapNum][i] = new OBJ_Key(gs);
+		gs.obj[mapNum][i].worldX = gs.sizeRect *16;
+		gs.obj[mapNum][i].worldY = gs.sizeRect * 19;
+		i++;
+		
+		gs.obj[mapNum][i] = new OBJ_Key(gs);
+		gs.obj[mapNum][i].worldX = gs.sizeRect * 17;
+		gs.obj[mapNum][i].worldY = gs.sizeRect * 19;
+		i++;
+		
+		gs.obj[mapNum][i] = new OBJ_Chest(gs, new OBJ_Key(gs));
+		gs.obj[mapNum][i].worldX = gs.sizeRect * 20;
+		gs.obj[mapNum][i].worldY = gs.sizeRect * 17;
 		i++;
 		
 	}

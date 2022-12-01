@@ -9,16 +9,17 @@ public class OBJ_Uniza_Coin extends Characters{
 		super(gs);
 		this.gs=gs;
 		
-		name="Uniza Coin";
+		name="Uniza dolár";
 		type = type_pickupONLY;
 		down1= setup ("/objekts/coin_uniza",gs.sizeRect,gs.sizeRect);
 		value=10;
 	}
 	
-	public void use(Characters character) {
+	public boolean use(Characters character) {
 		
 		gs.playSE(1);
-		gs.ui.addMessage("Coin +" +value);
+		gs.ui.addMessage("Lovákos +" +value);
 		gs.player.coin +=value;
+		return true;
 	}
 }

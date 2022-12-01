@@ -16,7 +16,8 @@ public class MON_BlueBall extends Characters{
 		this.gs=gs;
 		type= type_monster;
 		name= "Blue Ball";
-		speed = 1;
+		defaul_speed=1;
+		speed = defaul_speed;
 		maxLife = 3;
 		life=maxLife;
 		attack = 4;
@@ -70,7 +71,14 @@ public class MON_BlueBall extends Characters{
 		int i = new Random().nextInt(100)+1;
 		if(i > 99 && projectile.alive == false && shotAvailebleCount == 30) {
 			projectile.set(worldX, worldY, direction, true, this);
-			gs.projectileList.add(projectile);
+			//gs.projectile.add(projectile);
+			
+			for(int o = 0; o < gs.projectile[1].length;o++) {
+				if(gs.projectile[gs.currentMap][o] == null) {
+					gs.projectile[gs.currentMap][o] = projectile;
+					break;
+				}
+			}
 			shotAvailebleCount=0;
 		}
 	}

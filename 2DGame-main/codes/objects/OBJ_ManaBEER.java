@@ -14,21 +14,21 @@ public class OBJ_ManaBEER extends Characters{
 		this.gs=gs;
 		
 		type= type_pickupONLY;
-		name = "Beer";
+		name = "Pifko";
 		value= 1;
 		price=7;
 		down1 = image= setup("/objekts/beer_full",gs.sizeRect, gs.sizeRect);
 		image= setup("/objekts/beer_full",gs.sizeRect, gs.sizeRect);
 		image2= setup("/objekts/beer_blank",gs.sizeRect, gs.sizeRect);
 		
-		description = "[" + name +"]\nYou can shoot \nfireballs!";
+		//description = "[" + name +"]\nYou can shoot \nfireballs!";
 	}
 
 	
-	public void use(Characters character) {
+	public boolean use(Characters character) {
 		gs.playSE(2);
-		gs.ui.addMessage("Mana +" + value );
+		gs.ui.addMessage("Pifko munícia +" + value );
 		character.mana += value;
-		
+		return true;
 	}
 }

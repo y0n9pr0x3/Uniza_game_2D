@@ -21,6 +21,7 @@ public class UnizaPlayer extends Characters{
 	public final int screenY;
 	//public int hasKey=0;
 	public boolean attackCanceled=false;
+	public boolean lightUpdate = false;
 	
 	OBJ_Key key = new OBJ_Key(gs);
 	
@@ -31,7 +32,11 @@ public class UnizaPlayer extends Characters{
 		screenX = gs.screenWidth/2 - (gs.sizeRect/2);
 		screenY = gs.screenHeight/2 - (gs.sizeRect/2);
 		
-		solidRect = new Rectangle(8,16,32,32); // x,y , width, height
+		solidRect = new Rectangle(); // x,y , width, height
+		solidRect.x = 8;
+		solidRect.y = 16;
+		solidRect.width = 32;
+		solidRect.height = 32;
 		solidRectDefaultX = solidRect.x;
 		solidRectDefaultY = solidRect.y;
 		
@@ -49,7 +54,8 @@ public class UnizaPlayer extends Characters{
 		worldY=gs.sizeRect * 21;
 		//worldX=gs.sizeRect *12;
 		//worldY=gs.sizeRect * 13;
-		speed = 4;
+		defaul_speed = 4;
+		speed = defaul_speed;
 		level=1;
 		direction = "down";
 		maxLife = 6;
@@ -60,7 +66,7 @@ public class UnizaPlayer extends Characters{
 		dexterity=1;
 		exp=0;
 		nextLevelExp=5;
-		coin=50;
+		coin=500;
 		 
 	
 		currentWeapon=new OBJ_Sword_normal(gs);
@@ -134,6 +140,17 @@ public class UnizaPlayer extends Characters{
 			attackRight2 = setup("/player/boy_axe_right_2",gs.sizeRect*2,gs.sizeRect);
 		}
 		
+	}
+	
+	public void getSleepImage(BufferedImage image) {
+		up1 = image;
+		up2 = image;
+		down1 = image;
+		down2 = image;
+		left1 = image;
+		left2 =  image;
+		right1 = image;
+		right2 = image;
 	}
 	
 	public void update() {
@@ -227,8 +244,13 @@ public class UnizaPlayer extends Characters{
 			//subtract mana
 			projectile.subtractResource(this);
 			
-			//add it to list
-			gs.projectileList.add(projectile);
+			//projectile
+			for(int i=0; i < gs.projectile[1].length; i++) {
+				if(gs.projectile[gs.currentMap][i] == null) {
+					gs.projectile[gs.currentMap][i]= projectile;
+					break;
+				}
+			}
 			shotAvailebleCount = 0;
 			gs.playSE(10);
 		}
@@ -280,6 +302,44 @@ public class UnizaPlayer extends Characters{
 	
 	}
 	
+	public int searchItemInInventory(String itemName) {
+		
+		int itemIndex = 999;
+		for(int i=0; i <inventory.size(); i++) {
+			if(inventory.get(i).name.equals(itemName)) {
+				itemIndex =i;
+				break;
+			}
+		}
+		return itemIndex;
+	}
+	
+	public boolean canObtainItem(Characters item) {
+		boolean canObtain = false;
+		
+		//if it stackeble
+		if(item.stackable== true) {
+			int index = searchItemInInventory(item.name);
+			
+			if(index != 999) {
+				inventory.get(index).amount++;
+				canObtain=true;
+			}else {//new item
+				if(inventory.size() != inventorySize) {
+					inventory.add(item);
+					canObtain=true;
+				}
+				
+			}
+		}else { // not stackeble
+			if(inventory.size() != inventorySize) {
+				inventory.add(item);
+				canObtain=true;
+			}
+		}
+		return canObtain;
+	}
+	
 	public void attackingPlayer(){
 		spriteCounter++;
 		if(spriteCounter <= 5) {
@@ -309,10 +369,13 @@ public class UnizaPlayer extends Characters{
 			solidRect.height = attackArea.height;
 			
 			int monsterIndex = gs.cManager.checkCharacters(this, gs.mon);
-			damageMonster(monsterIndex,attack);
+			damageMonster(monsterIndex,attack,currentWeapon.knockBackPower);
 			
 			int iRectIndex = gs.cManager.checkCharacters(this, gs.iRect);
 			damageInteractRect(iRectIndex);
+			
+			int projectileIndex = gs.cManager.checkCharacters(this, gs.projectile);
+			damageProjectile(projectileIndex);
 			
 			worldX= currentWorldX;
 			worldY = currentWorldY;
@@ -329,6 +392,12 @@ public class UnizaPlayer extends Characters{
 			attacking=false;
 		}
 		
+	}
+	
+	public void knockBack(Characters character, int knockBackPower) {
+		character.direction = direction;
+		character.speed += knockBackPower;
+		character.knockBack=true;
 	}
 	
 	public void damageInteractRect(int i) {
@@ -349,23 +418,30 @@ public class UnizaPlayer extends Characters{
 		}
 	}
 	
-	public void damageMonster(int i, int attack) {
+	public void damageMonster(int i, int attack, int knockBackPower) {
 		if(i != 999) {
 			if(gs.mon[gs.currentMap][i].invincible == false) {
 				gs.playSE(5);
+				
+				if(knockBackPower > 0) {
+					knockBack(gs.mon[gs.currentMap][i],knockBackPower);
+				}
+				
+				
+				
 				int damage = attack - gs.mon[gs.currentMap][i].defense;
 				if (damage <0) {
 					damage=0;
 				}
 				gs.mon[gs.currentMap][i].life -= damage;
-				gs.ui.addMessage(damage +" damage!");
+				gs.ui.addMessage(damage +" rozdávaš!");
 				
 				gs.mon[gs.currentMap][i].invincible = true;
 				gs.mon[gs.currentMap][i].damageReaction();
 				
 				if(gs.mon[gs.currentMap][i].life <= 0) {
 					gs.mon[gs.currentMap][i].dying = true;
-					gs.ui.addMessage("You killed the " +gs.mon[gs.currentMap][i].name + "!");
+					gs.ui.addMessage("Zabeu si " +gs.mon[gs.currentMap][i].name + "!");
 					gs.ui.addMessage("Exp + " +gs.mon[gs.currentMap][i].exp);
 					exp += gs.mon[gs.currentMap][i].exp;
 					checkLevelUp();
@@ -375,6 +451,12 @@ public class UnizaPlayer extends Characters{
 		}
 	}
 	
+	public void damageProjectile(int i) {
+		if(i != 999) {
+			Characters projectile = gs.projectile[gs.currentMap][i];
+			projectile.alive = false;
+		}
+	}
 	
 	public void checkLevelUp() {
 		if(exp >= nextLevelExp) {
@@ -393,32 +475,27 @@ public class UnizaPlayer extends Characters{
 			defense = getDefense();
 			gs.playSE(8);
 			gs.gameStates = gs.dialogState;
-			gs.ui.currentDialogue = "You are Level "+ level + " now!\n"+"You feel stronger!";
+			gs.ui.currentDialogue = "Dostal si nový level, neposer sa z toho!";
 		}
 	}
 	
 	public void pickedUp(int i) {
 		if(i != 999) {
 			//items
-			if(gs.obj[gs.currentMap][i].name == "Boots") {
+			if(gs.obj[gs.currentMap][i].name == "Jordany") {
 				gs.obj[gs.currentMap][i]= null;
 				gs.playSE(1);
-				gs.ui.addMessage("Your speed was increase!");
+				gs.ui.addMessage("Nové jordany, Jou!");
 				gs.player.speed += 3;
 			}else if(gs.obj[gs.currentMap][i].type== type_pickupONLY) {
 				gs.obj[gs.currentMap][i].use(this);
 				gs.obj[gs.currentMap][i]=null;
 				
-			}else if(gs.obj[gs.currentMap][i].type == type_door) {
+			}else if(gs.obj[gs.currentMap][i].type == type_obstacle) {
 				gs.player.collision = true;
-				for(int s=0; s < inventory.size(); s++) {
-					if(inventory.get(s).name.equals("Key")) {
-						inventory.remove(s);
-						gs.playSE(3);
-						gs.obj[gs.currentMap][i] = null;
-					}else {
-						//gs.ui.addMessage("You have not a key!");
-					}
+				if(keys.enterPress == true) {
+					attackCanceled = true;
+					gs.obj[gs.currentMap][i].interact();
 					
 				}
 				
@@ -427,10 +504,10 @@ public class UnizaPlayer extends Characters{
 				//inventory items
 				String text;
 				
-				if(inventory.size() != inventorySize) {
-					inventory.add(gs.obj[gs.currentMap][i]);
+				if(canObtainItem(gs.obj[gs.currentMap][i]) == true) {
+					//inventory.add(gs.obj[gs.currentMap][i]);
 					gs.playSE(1);
-					text = "You got a "+gs.obj[gs.currentMap][i].name + "!";
+					text = "Získal si "+gs.obj[gs.currentMap][i].name + "!";
 					
 				}else {
 					text= "You cannot carry any more!";
@@ -465,9 +542,22 @@ public class UnizaPlayer extends Characters{
 				currentShield = selectedItem;
 				defense=getDefense();
 			}
+			if(selectedItem.type == type_light) {
+				if(currentLight == selectedItem) {
+					currentLight = null;
+				}else {
+					currentLight = selectedItem;
+				}
+				lightUpdate= true;
+			}
 			if(selectedItem.type == type_consumable) {
-				selectedItem.use(this);
-				inventory.remove(itemIndex);
+				if(selectedItem.use(this) == true) {
+					if(selectedItem.amount > 1) {
+						selectedItem.amount--;
+					}else {
+						inventory.remove(itemIndex);
+					}
+				}
 			}
 		}
 	}

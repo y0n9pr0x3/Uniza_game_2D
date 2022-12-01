@@ -12,11 +12,13 @@ public class OBJ_Fireball extends Projectile{
 		super(gs);
 		this.gs=gs;
 		
-		name= "FireBall";
+		name= "Ohnivo guľo!";
 		speed=8;
 		maxLife=80;
 		life=maxLife;
 		attack=2;
+		
+		knockBackPower = 0;
 		
 		useCost = 1;
 		alive=false;

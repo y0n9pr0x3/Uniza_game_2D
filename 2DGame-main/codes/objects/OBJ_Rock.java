@@ -12,7 +12,7 @@ public class OBJ_Rock extends Projectile{
 		super(gs);
 		this.gs=gs;
 		
-		name= "Rock";
+		name= "Hovno";
 		speed=8;
 		maxLife=80;
 		life=maxLife;

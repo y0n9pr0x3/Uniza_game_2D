@@ -31,6 +31,7 @@ public class Characters {
 	//hracove atributy
 	public int level;
 	public int maxMana;
+	public int defaul_speed;
 	public int mana;
 	public int ammo;
 	public int strength;
@@ -51,6 +52,7 @@ public class Characters {
 	public int useCost;
 	public int picCounter = 0;
 	public int picNum = 1;
+	public int knockbackCounter = 0;
 	public BufferedImage image,image2,image3;
 	public String name;
 	
@@ -72,6 +74,13 @@ public class Characters {
 	public boolean hpBarOn = false;
 	public int hpBarCounter = 0;
 	public int shotAvailebleCount = 0;
+	public boolean knockBack = false;
+	public int knockBackPower = 0;
+	public boolean stackable = false;
+	public int amount=1;
+	
+	public Characters currentLight;
+	public int lightRadius;
 	
 	//type
 	public int value;
@@ -84,7 +93,8 @@ public class Characters {
 	public final int type_consumable=6; // jedlé či to je
 	public final int type_pickupONLY=7;
 	public final int type_door=8;
-	//public final int type_key=9;
+	public final int type_obstacle = 9;
+	public final int type_light=10;
 	
 	
 	//character status
@@ -130,6 +140,30 @@ public class Characters {
 
 	}
 	
+	public int getLeftX() {
+		return worldX + solidRect.x;
+	}
+	
+	public int getRightX() {
+		return worldX + solidRect.x + solidRect.width;
+	}
+	
+	public int getTopY() {
+		return worldY + solidRect.y;
+	}
+	
+	public int getBottomY() {
+		return worldY + solidRect.y + solidRect.height;
+	}
+	
+	public int getCol() {
+		return (worldX + solidRect.x)/gs.sizeRect;
+	}
+	
+	public int getRow() {
+		return (worldY + solidRect.y)/gs.sizeRect;
+	}
+	
 	public void speak() {
 		if (dialogues[dialoguesIndex] == null) {
 			dialoguesIndex = 0;
@@ -153,12 +187,40 @@ public class Characters {
 		}
 	}
 	
-	public void use(Characters character) {
+	public boolean use(Characters character) {
+		return false;
+	}
+	
+	public int getDetected(Characters user, Characters target[][],String targetName) {
+		int index=999;
 		
+		int nextWorldX= user.getLeftX();
+		int nextWorldY= user.getTopY();
+		
+		switch(user.direction) {
+		case "up": nextWorldY = user.getTopY()-1; break;
+		case "down": nextWorldY= user.getBottomY()+1; break;
+		case "left": nextWorldX= user.getLeftX()-1;break;
+		case "right": nextWorldX= user.getRightX()+1;break;
+		}
+		
+		int col = nextWorldX/gs.sizeRect;
+		int row = nextWorldY/gs.sizeRect;
+		
+		for(int i =0; i < target[1].length; i++) {
+			if(target[gs.currentMap][i] != null) {
+				if(target[gs.currentMap][i].getCol() == col && 
+						target[gs.currentMap][i].getRow() == row &&
+						target[gs.currentMap][i].name.equals(targetName)) {
+					index=i;
+					break;
+				}
+			}
+		}
+		return index;
 	}
 	
 	public void update() {
-		setActionNpc();
 		
 		collisionOn=false;
 		gs.cManager.checkRect(this);
@@ -169,19 +231,53 @@ public class Characters {
 		gs.cManager.checkCharacters(this, gs.obj);
 		boolean contactPlayer = gs.cManager.checkPlayer(this);
 		
-		if(this.type == type_monster && contactPlayer == true) {
-			damagePlayer(attack);
-		}
 		
-		//if collision is false, player can move
-		if(collisionOn == false) {
-			switch(direction) {
-			case "up":worldY -= speed;break;
-			case "down":worldY += speed;break;
-			case "left":worldX -= speed;break;
-			case "right":worldX += speed;break;
+		if(knockBack == true) {
+			
+			
+			
+			if(this.type == type_monster && contactPlayer == true) {
+				damagePlayer(attack);
+			}
+			
+			if(collisionOn == true) {
+				knockbackCounter=0;
+				knockBack =false;
+				speed = defaul_speed;
+			}else if(collisionOn == false) {
+				switch(gs.player.direction) {
+				case "up":worldY -= speed;break;
+				case "down":worldY += speed;break;
+				case "left":worldX -= speed;break;
+				case "right":worldX += speed;break;
+				}
+			}
+			
+			knockbackCounter++;
+			if(knockbackCounter == 10) {
+				knockbackCounter =0;
+				knockBack=false;
+				speed=defaul_speed;
+			}
+			
+		}else {
+			setActionNpc();
+			
+			//if collision is false, player can move
+			if(collisionOn == false) {
+				switch(direction) {
+				case "up":worldY -= speed;break;
+				case "down":worldY += speed;break;
+				case "left":worldX -= speed;break;
+				case "right":worldX += speed;break;
+				}
 			}
 		}
+		
+		
+		
+		
+		
 		
 		spriteCounter ++;
 		if (spriteCounter > 24) {
@@ -204,6 +300,10 @@ public class Characters {
 		if(shotAvailebleCount < 30 ) {
 			shotAvailebleCount++;
 		}
+	}
+	
+	public void interact() {
+		
 	}
 	
 	public void damagePlayer(int attack) {

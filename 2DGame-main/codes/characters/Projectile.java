@@ -27,7 +27,7 @@ public class Projectile extends Characters{
 		if(user == gs.player ) {
 			int monsterIndex = gs.cManager.checkCharacters(this, gs.mon);
 			if(monsterIndex != 999) {
-				gs.player.damageMonster(monsterIndex,attack);
+				gs.player.damageMonster(monsterIndex,attack,knockBackPower);
 				alive=false;
 			}
 		}

@@ -4,11 +4,15 @@ import main.GameScreen;
 import objects.OBJ_Axe;
 import objects.OBJ_Boots;
 import objects.OBJ_Fireball;
+import objects.OBJ_Flasa_Borovicky;
 import objects.OBJ_Flasa_Vodky;
 import objects.OBJ_Key;
+import objects.OBJ_Lantern;
 import objects.OBJ_ManaBEER;
 import objects.OBJ_Potion_Red;
 import objects.OBJ_Shield_blue;
+import objects.OBJ_Sword_normal;
+import objects.OBJ_Tent;
 
 public class NPC_Merchant extends Characters{
 	
@@ -34,18 +38,21 @@ public class NPC_Merchant extends Characters{
 	}
 	
 	public void setDialogue() {
-		dialogues[0]= "Hi student,are you looking \nfor something.I've alcohol\nDo you wanna trade?";
+		dialogues[0]= "Szia bro, mám super \nmatroš keby chceš vybavím \nhop-šup prášek!";
 		
 	}
 	
 	public void setItems() {
 		inventory.add(new OBJ_Potion_Red(gs));
 		inventory.add(new OBJ_Shield_blue(gs));
-		inventory.add(new OBJ_Boots(gs));
+		inventory.add(new OBJ_Sword_normal(gs));
 		inventory.add(new OBJ_Key(gs));
 		inventory.add(new OBJ_Axe(gs));
-		inventory.add(new OBJ_ManaBEER(gs));
+		inventory.add(new OBJ_Lantern(gs));
+		inventory.add(new OBJ_Tent(gs));
+		//inventory.add(new OBJ_ManaBEER(gs));
 		inventory.add(new OBJ_Flasa_Vodky(gs));
+		inventory.add(new OBJ_Flasa_Borovicky(gs));
 		
 	}
 	

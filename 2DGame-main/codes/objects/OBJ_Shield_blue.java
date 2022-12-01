@@ -9,10 +9,10 @@ public class OBJ_Shield_blue extends Characters{
 		super(gs);
 		
 		type = type_shield;
-		name= "Blue shield";
+		name= "Ochranu II. Stupňa";
 		down1= setup("/objekts/shield_blue",gs.sizeRect,gs.sizeRect);
 		defenseValue = 2;
-		description = "[" + name +"]\nBetter protection.";
+		description = "[" + name +"]\nBlbuvzdorný štít II.\ngenerácie.";
 		price=8;
 	}
 }

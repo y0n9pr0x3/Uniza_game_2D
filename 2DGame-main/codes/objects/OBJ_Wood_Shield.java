@@ -9,10 +9,10 @@ public class OBJ_Wood_Shield extends Characters{
 		super(gs);
 		
 		type = type_shield;
-		name= "Wooden shield";
+		name= "Ochrana I. Stupňa";
 		down1= setup("/objekts/shield_wood",gs.sizeRect,gs.sizeRect);
 		defenseValue = 1;
-		description = "[" + name +"]\nMade by wood.";
+		description = "[" + name +"]\nBlbuvzdorný štít I.\ngenerácie.";
 		price=6;
 	}
 

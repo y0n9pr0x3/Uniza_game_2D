@@ -10,17 +10,19 @@ public class OBJ_Potion_Red extends Characters{
 		super(gs);
 		this.gs=gs;
 		type= type_consumable;
-		name="RedBull";
+		name="Gumidžús";
 		value=2;
 		price=10;
 		down1= setup("/objekts/potion_red",gs.sizeRect,gs.sizeRect);
-		description = "[" + name +"]\nYou can fly. If you \nwant. Heal by "+value+"hp.";
+		description = "[" + name +"]\nŠe, napi a budeš \nskákac jak gumkáč!";
+		stackable = true;
 	}
 	
-	public void use(Characters character) {
+	public boolean use(Characters character) {
 		gs.gameStates = gs.dialogState;
-		gs.ui.currentDialogue= "You drink the "+name+"!\n" + "Your life has been recovered \nby "+value+".";
+		gs.ui.currentDialogue= "You drink the "+name+"!\n" + "Your life has been \nrecovered by "+value+".";
 		character.life += value;
 		gs.playSE(2);
+		return true;
 	}
 }

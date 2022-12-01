@@ -133,6 +133,11 @@ public class UserInterf {
 		if(gs.gameStates == gs.tradingState) {
 			drawTradingScreen();
 		}
+		
+		//sleep state
+		if(gs.gameStates == gs.sleepState) {
+			drawSleepScreen();
+		}
 	}
 	
 	public void drawLife() {
@@ -235,7 +240,7 @@ public class UserInterf {
 		int textX;
 		int textY;
 		
-		String text = "OPTIONS";
+		String text = "MOŽNOSTI";
 		
 		textX= getXforCenteredText(text);
 		textY= frameY + gs.sizeRect;
@@ -259,21 +264,21 @@ public class UserInterf {
 		
 		//music
 		textY+=gs.sizeRect;
-		g2.drawString("MUSIC", textX, textY);
+		g2.drawString("HUDBA", textX, textY);
 		if(selectedNum == 1) {
 			g2.drawString(">", textX-25, textY);
 		}
 		
 		//se
 		textY+=gs.sizeRect;
-		g2.drawString("SE", textX, textY);
+		g2.drawString("EFEKTY", textX, textY);
 		if(selectedNum == 2) {
 			g2.drawString(">", textX-25, textY);
 		}
 		
 		//control
 		textY+=gs.sizeRect;
-		g2.drawString("CONTROLS", textX, textY);
+		g2.drawString("OVLÁDANIE", textX, textY);
 		if(selectedNum == 3) {
 			g2.drawString(">", textX-25, textY);
 			if(gs.keys.enterPress == true) {
@@ -285,7 +290,7 @@ public class UserInterf {
 		
 		//end game
 		textY+=gs.sizeRect;
-		g2.drawString("END GAME", textX, textY);
+		g2.drawString("KONEC HRY", textX, textY);
 		if(selectedNum == 4) {
 			g2.drawString(">", textX-25, textY);
 			if(gs.keys.enterPress == true) {
@@ -297,7 +302,7 @@ public class UserInterf {
 		
 		//back
 		textY+=gs.sizeRect*2;
-		g2.drawString("BACK", textX, textY);
+		g2.drawString("SPÄŤ", textX, textY);
 		if(selectedNum == 5) {
 			g2.drawString(">", textX-25, textY);
 			if(gs.keys.enterPress == true) {
@@ -347,7 +352,7 @@ public class UserInterf {
 	}
 	
 	public void options_control(int frameX, int frameY) {
-		String text = "CONTROL";
+		String text = "OVLÁDANIE";
 		int textX = getXforCenteredText(text);
 		int textY = frameY + gs.sizeRect;
 		g2.drawString(text, textX, textY);
@@ -358,22 +363,22 @@ public class UserInterf {
 		textX = frameX + gs.sizeRect;
 		textY+= gs.sizeRect;
 		
-		g2.drawString("MOVE", textX, textY);
+		g2.drawString("POHYB", textX, textY);
 		textY+= gs.sizeRect;
 		
-		g2.drawString("ATTACK/CONF", textX, textY);
+		g2.drawString("ÚTOK", textX, textY);
 		textY+= gs.sizeRect;
 		
-		g2.drawString("SHOOT/CAST", textX, textY);
+		g2.drawString("STREĽBA", textX, textY);
 		textY+= gs.sizeRect;
 		
-		g2.drawString("INVENTORY", textX, textY);
+		g2.drawString("INVENTOR", textX, textY);
 		textY+= gs.sizeRect;
 		
-		g2.drawString("PAUSE", textX, textY);
+		g2.drawString("PAUZA", textX, textY);
 		textY+= gs.sizeRect;
 		
-		g2.drawString("OPTIONS", textX, textY);
+		g2.drawString("MOŽNOSTI", textX, textY);
 		textY+= gs.sizeRect;
 		
 		//back
@@ -413,7 +418,7 @@ public class UserInterf {
 		int textX = frameX + gs.sizeRect;
 		int textY= frameY + gs.sizeRect*3;
 		
-		currentDialogue = "QUIT the game and \nreturn to tittle \nscreen without saving!";
+		currentDialogue = "Odíd, ale hra nebude \nuložená!!";
 		
 		for(String line: currentDialogue.split("\n")) {
 			g2.drawString(line, textX, textY);
@@ -421,7 +426,7 @@ public class UserInterf {
 		}
 		
 		//yes 
-		String text = "YES";
+		String text = "ANO";
 		textX = getXforCenteredText(text);
 		textY += gs.sizeRect*3;
 		g2.drawString(text, textX, textY);
@@ -438,7 +443,7 @@ public class UserInterf {
 		
 		//no
 		
-		text = "NO";
+		text = "NIE";
 		textX = getXforCenteredText(text);
 		textY += gs.sizeRect;
 		g2.drawString(text, textX, textY);
@@ -499,6 +504,28 @@ public class UserInterf {
 		}
 	}
 	
+	public void drawSleepScreen() {
+		tranCounter++;
+		
+		if(tranCounter <120) {
+			gs.eManag.light.filterAlpha += 0.01f;
+			if(gs.eManag.light.filterAlpha > 1f) {
+				gs.eManag.light.filterAlpha = 1f;
+			}
+		}
+		if(tranCounter >= 120) {
+			gs.eManag.light.filterAlpha -= 0.01f;
+			if(gs.eManag.light.filterAlpha <= 0f) {
+				gs.eManag.light.filterAlpha = 0f;
+				tranCounter=0;
+				gs.eManag.light.dayState = gs.eManag.light.day;
+				gs.eManag.light.dayCount =0;
+				gs.gameStates = gs.huntState;
+				gs.player.getImage();
+			}
+		}
+	}
+	
 	public void drawCharScreen() {
 		
 		//window frame
@@ -520,27 +547,27 @@ public class UserInterf {
 		//names
 		g2.drawString("Level", textX, textY);
 		textY += lineHeight;
-		g2.drawString("Life", textX, textY);
+		g2.drawString("Život", textX, textY);
 		textY += lineHeight;
 		g2.drawString("Mana", textX, textY);
 		textY += lineHeight;
-		g2.drawString("Strength", textX, textY);
+		g2.drawString("Sila", textX, textY);
 		textY += lineHeight;
-		g2.drawString("Dexterity", textX, textY);
+		g2.drawString("Obratnosť", textX, textY);
 		textY += lineHeight;
-		g2.drawString("Attack", textX, textY);
+		g2.drawString("Útok", textX, textY);
 		textY += lineHeight;
-		g2.drawString("Defense", textX, textY);
+		g2.drawString("Obrana", textX, textY);
 		textY += lineHeight;
 		g2.drawString("Exp", textX, textY);
 		textY += lineHeight;
-		g2.drawString("Next Level", textX, textY);
+		g2.drawString("Další Level", textX, textY);
 		textY += lineHeight;
-		g2.drawString("Coin", textX, textY);
+		g2.drawString("Dolár", textX, textY);
 		textY += lineHeight+15;
-		g2.drawString("Weapon", textX, textY);
+		g2.drawString("Zbraň", textX, textY);
 		textY += lineHeight+15;
-		g2.drawString("Shield", textX, textY);
+		g2.drawString("Štít", textX, textY);
 		textY += lineHeight;
 		
 		
@@ -639,7 +666,7 @@ public class UserInterf {
 		//retry
 		g2.setFont(g2.getFont().deriveFont(50f));
 		g2.setColor(Color.black);
-		text="Retry";
+		text="Skúsiť znova!";
 		x =getXforCenteredText(text);
 		y +=gs.sizeRect*4;
 		g2.drawString(text, x, y);
@@ -655,9 +682,9 @@ public class UserInterf {
 		
 		//quit
 		g2.setColor(Color.black);
-		text="QUIT";
+		text="Ukončiť hru!";
 		x =getXforCenteredText(text);
-		y += 55;
+		y += 60;
 		g2.drawString(text, x, y);
 		
 		g2.setColor(new Color(252, 127, 3,200));
@@ -707,29 +734,29 @@ public class UserInterf {
 		
 		x += gs.sizeRect;
 		y += gs.sizeRect;
-		g2.drawString("Buy", x, y);
+		g2.drawString("Kúpa", x-15, y);
 		if(selectedNum == 0) {
-			g2.drawString(">", x-24, y);
+			g2.drawString(">", x-34, y);
 			if(gs.keys.enterPress == true) {
 				subState = 1;
 			}
 		}
 		y += gs.sizeRect;
-		g2.drawString("Sell", x, y);
+		g2.drawString("Predaj", x-15, y);
 		if(selectedNum == 1) {
-			g2.drawString(">", x-24, y);
+			g2.drawString(">", x-34, y);
 			if(gs.keys.enterPress == true) {
 				subState = 2;
 			}
 		}
 		y += gs.sizeRect;
-		g2.drawString("Leave", x, y);
+		g2.drawString("Späť", x-15, y);
 		if(selectedNum == 2) {
-			g2.drawString(">", x-24, y);
+			g2.drawString(">", x-34, y);
 			if(gs.keys.enterPress == true) {
 				selectedNum = 0;
 				gs.gameStates = gs.dialogState;
-				currentDialogue = "Come again, hehe!";
+				currentDialogue = "Maj sa, nabudúce kúp \nteho vác";
 			}
 		}
 		
@@ -748,7 +775,7 @@ public class UserInterf {
 		int width = gs.sizeRect*6;
 		int height = gs.sizeRect*2;
 		drawSubWind(x, y, width, height);
-		g2.drawString("[ESC] Back", x+24, y+55);
+		g2.drawString("[ESC] Späť", x+24, y+55);
 		
 		//draw npc  coin window
 		x = gs.sizeRect*11;
@@ -756,7 +783,7 @@ public class UserInterf {
 		width = gs.sizeRect*6;
 		height = gs.sizeRect*2;
 		drawSubWind(x, y, width, height);
-		g2.drawString("Your coin: "+gs.player.coin, x+24, y+55);
+		g2.drawString("Doláros: "+gs.player.coin, x+24, y+55);
 		
 		//DRAW price WINDOW
 		int itemIndex= getItemIndexOnSlot(npcSlotCol, npcSlotRow);
@@ -783,13 +810,14 @@ public class UserInterf {
 					gs.gameStates = gs.dialogState;
 					currentDialogue = "Nemáš love , čo by si \nchcel?";
 					drawDialogue();
-				}else if(gs.player.inventory.size() == gs.player.inventorySize) {
-					subState=0;
-					gs.gameStates = gs.dialogState;
-					currentDialogue = "Maš plne vrecka čo ty \nchceš!";
 				}else {
-					gs.player.coin -= npc.inventory.get(itemIndex).price;
-					gs.player.inventory.add(npc.inventory.get(itemIndex));
+					if(gs.player.canObtainItem(npc.inventory.get(itemIndex)) == true) {
+						gs.player.coin -= npc.inventory.get(itemIndex).price;
+					}else {
+						subState=0;
+						gs.gameStates = gs.dialogState;
+						currentDialogue = "Maš plné vrecka čo ty \nchceš!";
+					}
 				}
 			}
 		}
@@ -810,7 +838,7 @@ public class UserInterf {
 		width = gs.sizeRect*6;
 		height = gs.sizeRect*2;
 		drawSubWind(x, y, width, height);
-		g2.drawString("[ESC] Back", x+24, y+55);
+		g2.drawString("[ESC] Späť", x+24, y+55);
 		
 		//draw npc  coin window
 		x = gs.sizeRect*11;
@@ -818,7 +846,7 @@ public class UserInterf {
 		width = gs.sizeRect*6;
 		height = gs.sizeRect*2;
 		drawSubWind(x, y, width, height);
-		g2.drawString("Your coin: "+gs.player.coin, x+24, y+55);
+		g2.drawString("Doláros: "+gs.player.coin, x+24, y+55);
 		
 		//DRAW price WINDOW
 		int itemIndex= getItemIndexOnSlot(playerSlotCol, playerSlotRow);
@@ -845,9 +873,13 @@ public class UserInterf {
 					selectedNum=0;
 					subState=0;
 					gs.gameStates = gs.dialogState;
-					currentDialogue= "You cannot sell an \nequipped item!";
+					currentDialogue= "Vybavené náradičko,\nnemôžeš predať!!!";
 				}else {
-					gs.player.inventory.remove(itemIndex);
+					if(gs.player.inventory.get(itemIndex).amount > 1 ) {
+						gs.player.inventory.get(itemIndex).amount--;
+					}else {
+						gs.player.inventory.remove(itemIndex);
+					}
 					gs.player.coin += price;
 				}
 					
@@ -894,12 +926,32 @@ public class UserInterf {
 		for(int i = 0; i < character.inventory.size(); i++) {
 			//EQUIP cursor
 			if(character.inventory.get(i)== character.currentWeapon || 
-					character.inventory.get(i)== character.currentShield) {
+					character.inventory.get(i)== character.currentShield ||
+					character.inventory.get(i)== character.currentLight) {
 				g2.setColor(new Color(179,98,0));
 				g2.fillRoundRect(slotX, slotY, gs.sizeRect, gs.sizeRect,10,10);
 			}
 			
 			g2.drawImage(character.inventory.get(i).down1, slotX, slotY, null );
+			
+			//display amount
+			if(character == gs.player && character.inventory.get(i).amount > 1) {
+				g2.setFont(g2.getFont().deriveFont(32f));
+				int amountX;
+				int amountY;
+				String s = ""+ character.inventory.get(i).amount;
+				amountX=getXforAlignToRightText(s, slotX + 44);
+				amountY= slotY + gs.sizeRect;
+				
+				//draw shadow number
+				g2.setColor(new Color(60,60,60));
+				g2.drawString(s, amountX, amountY);
+				
+				//number
+				g2.setColor(Color.yellow
+						);
+				g2.drawString(s, amountX-3, amountY-3);
+			}
 			slotX += slotSize;
 			
 			if(i == 4 || i == 9 || i == 14){
@@ -1021,9 +1073,9 @@ public class UserInterf {
 			
 			
 			
-			text = "New Game";
+			text = "Nová hra";
 			x = gs.sizeRect*2;
-			y = gs.sizeRect *7;
+			y = gs.sizeRect *7+10;
 			g2.setColor(Color.black);
 			g2.drawString(text, x, y);
 			g2.setColor(Color.decode("#FF742c"));
@@ -1036,9 +1088,9 @@ public class UserInterf {
 			}
 			
 			
-			text = "Load Game";
+			text = "Načítaj";
 			x = gs.sizeRect*2;
-			y += gs.sizeRect;
+			y += gs.sizeRect+5;
 			g2.setColor(Color.black);
 			g2.drawString(text, x, y);
 			g2.setColor(Color.decode("#FF742c"));
@@ -1051,7 +1103,7 @@ public class UserInterf {
 			}
 			
 			
-			text = "Options";
+			text = "Možnosti";
 			x = gs.sizeRect*2;
 			y += gs.sizeRect;
 			g2.setColor(Color.black);
@@ -1066,9 +1118,9 @@ public class UserInterf {
 			}
 			
 			
-			text = "Quit";
+			text = "Ukončiť hru";
 			x = gs.sizeRect*2;
-			y += gs.sizeRect;
+			y += gs.sizeRect+5;
 			g2.setColor(Color.black);
 			g2.drawString(text, x, y);
 			g2.setColor(Color.decode("#FF742c"));
@@ -1096,7 +1148,7 @@ public class UserInterf {
 			int x;
 			int y=0;
 			
-			text="Play";
+			text="Hrať";
 			x = gs.sizeRect;
 			y += gs.sizeRect*10;
 			g2.setColor(Color.black);
@@ -1111,7 +1163,7 @@ public class UserInterf {
 				g2.setColor(Color.decode("#FF742c"));
 				g2.drawString(">", x-gs.sizeRect+3, y+3);
 			}
-			text="Back";
+			text="Späť";
 			x = gs.sizeRect;
 			y += gs.sizeRect;
 			g2.setColor(Color.black);
@@ -1127,8 +1179,8 @@ public class UserInterf {
 				
 			}
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD,40));
-			text = "NAME : " + gs.id;
-			x = gs.sizeRect;
+			text = "Krycia prezývka : " + gs.id;
+			x = gs.sizeRect- (gs.sizeRect/2);
 			y = gs.sizeRect*2;
 			g2.setColor(Color.black);
 			g2.drawString(text, x, y);
@@ -1137,7 +1189,7 @@ public class UserInterf {
 			
 			
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD,30));
-			text = "Your Default Stuff: ";
+			text = "Tvoja výbava, vagoš: ";
 			x = gs.sizeRect - (gs.sizeRect/2);
 			y = gs.sizeRect*4;
 			g2.setColor(Color.black);
@@ -1215,7 +1267,7 @@ public class UserInterf {
 		//g2.setColor(Color.white);
 		g2.setColor(Color.black);
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,50));
-		String text="PAUSED";
+		String text="PAUZA";
 		int x= getXforCenteredText(text);
 				
 		

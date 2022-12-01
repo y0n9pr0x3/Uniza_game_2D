@@ -53,11 +53,15 @@ public class Events {
 			if(hit(0,27,16,"right")== true) {holeTrap(gs.dialogState);}
 			//else if(hit(0,23,19,"any")== true) {holeTrap(gs.dialogState);}
 			
-			else if(hit(0,23,17,"any")== true) {teleport(1,12,13);}
+			//else if(hit(0,23,17,"any")== true) {teleport(1,12,13);}
 			
-			else if(hit(1,12,13,"any")== true) {teleport(0,23,17);}
+			//else if(hit(1,12,13,"any")== true) {teleport(0,23,17);}
 			
 			else if(hit(1,12,9,"up")==true) { speak(gs.npc[1][0]);}
+			
+			else if(hit(0,16,17,"any")== true) {teleport(1,12,13);}
+			
+			else if(hit(1,12,13,"any")== true) {teleport(0,16,17);}
 			
 			//if(hit(27,16,"right")== true) {teleport(gp.dialogState);}
 			
@@ -95,7 +99,7 @@ public class Events {
 		gs.gameStates = gameState;
 		gs.playSE(6);
 		
-		gs.ui.currentDialogue = "You have fallen \ninto a hole!";
+		gs.ui.currentDialogue = "Zdrbal si sa do jamy\nnebuď kokot volaj \nLukašenkovi!";
 		gs.player.life -=1;
 		// eveRect[col][row].eveDone = true;  event once time
 		canTouchEvent = false;

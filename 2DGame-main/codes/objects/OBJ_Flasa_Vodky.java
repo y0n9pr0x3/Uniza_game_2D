@@ -14,14 +14,15 @@ public class OBJ_Flasa_Vodky extends Characters{
 		value=4;
 		price=15;
 		down1= setup("/objekts/flasa_vodky",gs.sizeRect,gs.sizeRect);
-		description = "[" + name +"]\nVodka better than \nsex. Heal by "+value+"hp.";
+		description = "[" + name +"]\nPatok, rating 4/10!";
 	}
 	
-	public void use(Characters character) {
+	public boolean use(Characters character) {
 		gs.gameStates = gs.dialogState;
 		gs.ui.currentDialogue= "You drink the "+name+"!\n" + "Your life has been \nrecovered by "+value+".";
 		character.life += value;
 		gs.playSE(2);
+		return true;
 	}
 
 }

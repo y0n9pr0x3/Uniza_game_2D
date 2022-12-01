@@ -16,7 +16,8 @@ import java.awt.image.BufferedImage;
 	
 	import characters.Characters;
 	import characters.UnizaPlayer;
-	import rects.RectManager;
+import envi.EnvironmentManag;
+import rects.RectManager;
 import rects_interact.InteractiveRect;
 	
 	public class GameScreen extends JPanel implements Runnable{
@@ -60,7 +61,9 @@ import rects_interact.InteractiveRect;
 	public Characters mon[][] = new Characters[maxMap][20];
 	public InteractiveRect iRect[][] = new InteractiveRect[maxMap][50];
 	public ArrayList<Characters> charactList = new ArrayList<>();
-	public ArrayList<Characters> projectileList = new ArrayList<>();
+	public Characters projectile[][] = new Characters[maxMap][20];
+	public EnvironmentManag eManag = new EnvironmentManag(this);
+	//public ArrayList<Characters> projectileList = new ArrayList<>();
 	
 	public String id;
 	
@@ -83,6 +86,7 @@ import rects_interact.InteractiveRect;
 	public final int gameOverState=6;
 	public final int transitionState=7;
 	public final int tradingState=8;
+	public final int sleepState=9;
 			
 	//FPS
 	int fps=60;
@@ -101,6 +105,7 @@ import rects_interact.InteractiveRect;
 		dObject.setNPC();
 		dObject.setMonster();
 		dObject.setInterRect();
+		eManag.setUP();
 		//playMusic(14);
 		gameStates= titleState;
 		
@@ -116,14 +121,33 @@ import rects_interact.InteractiveRect;
 	
 	public void retry() {
 		playMusic(14);
+		
+		
 		player.setDefaultPosition();
 		player.restoreLifeAndMana();
 		dObject.setNPC();
 		dObject.setMonster();
+		
+	}
+	
+	
+	public void setInventoryTonull(String name) {
+		for(int i=0; i < player.inventory.size(); i++) {
+			if(player.inventory.get(i).name.equals(name)) {
+				player.inventory.get(i).amount = 1;
+			}
+		}
 	}
 	
 	public void restart() {
 		//playMusic(14);
+		
+		
+		
+		setInventoryTonull("VšeKľúč");
+		setInventoryTonull("Gumidžús");
+		
+		
 		player.setDefault();
 		player.setDefaultPosition();
 		player.restoreLifeAndMana();
@@ -206,13 +230,13 @@ import rects_interact.InteractiveRect;
 			}
 			
 			//projectile
-			for(int i=0; i < projectileList.size();i++) {
-				if(projectileList.get(i) != null) {
-					if(projectileList.get(i).alive == true) {
-						projectileList.get(i).update();
+			for(int i=0; i < projectile[1].length;i++) {
+				if(projectile[currentMap][i] != null) {
+					if(projectile[currentMap][i].alive == true) {
+						projectile[currentMap][i].update();
 					}
-					if(projectileList.get(i).alive == false) {
-						projectileList.remove(i);
+					if(projectile[currentMap][i].alive == false) {
+						projectile[currentMap][i] = null;
 					}
 				}
 			}
@@ -224,7 +248,12 @@ import rects_interact.InteractiveRect;
 				}
 			}
 			
+			eManag.update();
+			
 		}
+		
+		
+		
 		if(gameStates == pauseState) {
 			
 		}
@@ -275,9 +304,9 @@ import rects_interact.InteractiveRect;
 			}
 		}
 		
-		for(int i=0; i < projectileList.size(); i++) {
-			if(projectileList.get(i) != null) {
-				charactList.add(projectileList.get(i));
+		for(int i=0; i < projectile[1].length; i++) {
+			if(projectile[currentMap][i] != null) {
+				charactList.add(projectile[currentMap][i]);
 			}
 		}
 		
@@ -299,6 +328,9 @@ import rects_interact.InteractiveRect;
 		
 		//reset list
 		charactList.clear();
+		
+		//envi
+		eManag.draw(g2);
 		
 		//UI
 		ui.draw(g2);
