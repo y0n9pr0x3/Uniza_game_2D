@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.awt.geom.Rectangle2D"/>
+    <fullyQualifiedTypeName name="java.awt.geom.Rectangle2D.Double"/>
+    <fullyQualifiedTypeName name="java.awt.geom.Area"/>
+    <fullyQualifiedTypeName name="java.awt.geom.Ellipse2D.Double"/>
+    <fullyQualifiedTypeName name="java.awt.geom.Ellipse2D"/>
+    <fullyQualifiedTypeName name="java.awt.Shape"/>
+    <fullyQualifiedTypeName name="main.GameScreen"/>
+    <fullyQualifiedTypeName name="java.awt.Graphics2D"/>
+    <fullyQualifiedTypeName name="envi.Light"/>
+    <fullyQualifiedTypeName name="envi.EnvironmentManag"/>
+    <fullyQualifiedTypeName name="java.awt.RadialGradientPaint"/>
+    <fullyQualifiedTypeName name="java.awt.AlphaComposite"/>
+    <fullyQualifiedTypeName name="java.awt.EventFilter.FilterAction"/>
+    <fullyQualifiedTypeName name="objects.OBJ_Lantern"/>
+    <fullyQualifiedTypeName name="java.awt.Color"/>
+    <fullyQualifiedTypeName name="characters.Characters"/>
+    <fullyQualifiedTypeName name="objects.OBJ_Tent"/>
+    <fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
+</qualifiedTypeNameHistroy>
