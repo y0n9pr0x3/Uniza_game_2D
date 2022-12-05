@@ -12,15 +12,12 @@ public class Main {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/img/fakla.jpg")));
-		window.setTitle("Unyza Game 1.0");
+		window.setTitle("Unyza Game 1.6");
 		
 		GameScreen gameScreen = new GameScreen();
 		window.add(gameScreen);
 		gameScreen.config.loadConf();
 		
-		if(gameScreen.fullscreenOn ==true ) {
-			window.setUndecorated(true);
-		}
 		window.pack();
 		
 		window.setLocationRelativeTo(null);

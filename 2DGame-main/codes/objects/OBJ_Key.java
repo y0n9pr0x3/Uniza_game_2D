@@ -28,7 +28,7 @@ public class OBJ_Key extends Characters{
 			gs.obj[gs.currentMap][objIndex] = null;
 			return true;
 		}else {
-			gs.ui.currentDialogue= "What are you doing";
+			gs.ui.currentDialogue= "Vidíš dvere? Ne? tak čo \nskúšaš!";
 			return false;
 		}
 	}

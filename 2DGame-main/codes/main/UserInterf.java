@@ -249,7 +249,7 @@ public class UserInterf {
 		//full screen
 		textX= frameX + gs.sizeRect;
 		textY += gs.sizeRect*2;
-		g2.drawString("FULL SCREEN" , textX, textY);
+		g2.drawString("Si Kokot?" , textX, textY);
 		if(selectedNum == 0) {
 			g2.drawString(">", textX-25, textY);
 			if(gs.keys.enterPress == true) {

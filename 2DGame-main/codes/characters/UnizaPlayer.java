@@ -510,7 +510,7 @@ public class UnizaPlayer extends Characters{
 					text = "Získal si "+gs.obj[gs.currentMap][i].name + "!";
 					
 				}else {
-					text= "You cannot carry any more!";
+					text= "Si plný , predaj dačo!";
 				}
 				gs.ui.addMessage(text);
 				gs.obj[gs.currentMap][i] =null;
